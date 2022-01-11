@@ -1,4 +1,5 @@
 import { App } from "./App/App.js";
-import { Products } from "./Products/Products.jsx";
+import { Products } from "./Products/Products";
+import { Rating } from "./Rating/Rating";
 
-export { App, Products };
+export { App, Products, Rating };
