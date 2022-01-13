@@ -1,27 +1,46 @@
 import React from "react";
 import { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Alert, Button, Form } from "react-bootstrap";
 
 function UserForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [passwordErrr, setPasswordError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
-  const handleOnSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
     let emailValid = false;
+    let passwordValid = false;
 
-    if (email.length < 0) {
+    if (email.length === 0) {
       setEmailError("Email is required");
+    } else if (email.length < 8) {
+      setEmailError("Email should be minimum 8 characters");
+    } else if (email.indexOf(" ") >= 0) {
+      setEmailError("Email cannot contain spaces");
+    } else {
+      setEmailError("");
+      emailValid = true;
+    }
+
+    if (password.length === 0) {
+      setPasswordError("Password is required");
+    } else if (password.length < 8) {
+      setPasswordError("Password should be minimum 8 characters");
+    } else if (password.indexOf(" ") >= 0) {
+      setPasswordError("Password cannot contain spaces");
+    } else {
+      setPasswordError("");
+      passwordValid = true;
+    }
+    if (emailValid && passwordValid) {
+      alert(`Email: ${email} \nPassword: ${password}`);
     }
   };
-
-  console.log(email);
-
   return (
-    <Form onSubmit={handleOnSubmit}>
+    <Form onSubmit={handleSubmit}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <Form.Control
@@ -34,6 +53,8 @@ function UserForm() {
         </Form.Text>
       </Form.Group>
 
+      {emailError.length > 0 && <Alert variant="danger">{emailError}</Alert>}
+
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Password</Form.Label>
         <Form.Control
@@ -42,6 +63,10 @@ function UserForm() {
           onChange={(event) => setPassword(event.target.value)}
         />
       </Form.Group>
+
+      {passwordError.length > 0 && (
+        <Alert variant="danger"> {passwordError} </Alert>
+      )}
 
       {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
         <Form.Check type="checkbox" label="Check me out" />
