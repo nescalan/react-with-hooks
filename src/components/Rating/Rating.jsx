@@ -39,7 +39,7 @@ function Rating(props) {
       ) : (
         <IoIosStarOutline onClick={() => setRating(5)} />
       )}{" "}
-      {props.numOfReviews}
+      <h5>Reviews: {props.numOfReviews}</h5>
     </div>
   );
 }
