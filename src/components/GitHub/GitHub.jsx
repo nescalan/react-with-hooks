@@ -5,16 +5,22 @@ import { Card, Spinner } from "react-bootstrap";
 function GitHub() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("nescalan");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    axios
+  const getData = async () => {
+    const res = await axios
       .get(`https://api.github.com/search/users?q=${searchTerm}`)
       .then((res) => {
         setData(res.data.items);
         setIsLoading(false);
       });
-  }, []);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    getData();
+  };
 
   const listUsers = data.map((user) => (
     <Card key={user.id} style={{ width: "18rem" }}>
@@ -26,15 +32,30 @@ function GitHub() {
     </Card>
   ));
 
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
-    <div>
+    <>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          onChange={(event) => setSearchTerm(event.target.value)}
+        />
+        <button type="submit">Search...</button>
+      </form>
+      <br />
+      <h1>GitHub Users Results</h1>
+      <hr />
+
       {isLoading && (
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
         </Spinner>
       )}
       {listUsers}
-    </div>
+    </>
   );
 }
 
